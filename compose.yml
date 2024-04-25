@@ -12,5 +12,5 @@ services:
    #     target: /var/lib/postgresql/data --> in case u need to save data to local storage
     ports:
       - target: 5432
-        published: 5432
+        published: ${DB_PORT:-5432}
         protocol: tcp
