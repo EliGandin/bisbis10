@@ -1,5 +1,7 @@
 package com.att.tdp.bisbis10.services.impl;
 
+import com.att.tdp.bisbis10.dtos.RestaurantWithDishes;
+import com.att.tdp.bisbis10.entities.Dish;
 import com.att.tdp.bisbis10.entities.Restaurant;
 import com.att.tdp.bisbis10.repositories.RestaurantRepository;
 import com.att.tdp.bisbis10.services.RestaurantService;
@@ -10,9 +12,11 @@ import java.util.Optional;
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
+    private final DishServiceImpl dishService;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, DishServiceImpl dishService) {
         this.restaurantRepository = restaurantRepository;
+        this.dishService = dishService;
     }
 
     @Override
@@ -46,6 +50,17 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Iterable<Restaurant> getRestaurantsByCuisine(String cuisine) {
-        return restaurantRepository.findAllByCuisines(cuisine);
+        return restaurantRepository.findAllByCuisine(cuisine);
+    }
+
+    public RestaurantWithDishes getRestaurantWithDishes(Long id) {
+        RestaurantWithDishes res = new RestaurantWithDishes();
+        Optional<Restaurant> restaurant = findById(id);
+        Iterable<Dish> dishes = dishService.getDishesById(id);
+
+        res.setRestaurant(restaurant.get());
+        res.setDishes(dishes);
+
+        return res;
     }
 }

@@ -32,7 +32,6 @@ public class Restaurant {
     }
     public Restaurant(String name,Rating rating, boolean isKosher, List<String> cuisines) {
         this.name = name;
-//        this.rating = rating;
         this.isKosher = isKosher;
         this.cuisines = cuisines;
     }

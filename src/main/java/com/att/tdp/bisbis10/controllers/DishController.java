@@ -44,10 +44,10 @@ public class DishController {
     }
 
     @GetMapping(path = "/restaurants/{id}/dishes")
-    public ResponseEntity<Dish> getDishByRestaurantId(@PathVariable("id") Long id) {
-        Dish dish = dishService.getDishById(id);
-        if (dish != null) {
-            return new ResponseEntity<>(dish, HttpStatus.OK);
+    public ResponseEntity<Iterable<Dish>> getDishesByRestaurantId(@PathVariable("id") Long id) {
+        Iterable<Dish> result = dishService.getDishesById(id);
+        if (result != null) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

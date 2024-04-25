@@ -1,6 +1,7 @@
 package com.att.tdp.bisbis10.controllers;
 
 import com.att.tdp.bisbis10.dtos.RestaurantDTO;
+import com.att.tdp.bisbis10.dtos.RestaurantWithDishes;
 import com.att.tdp.bisbis10.entities.Restaurant;
 import com.att.tdp.bisbis10.mappers.impl.RestaurantMapperImpl;
 import com.att.tdp.bisbis10.services.RestaurantService;
@@ -27,8 +28,8 @@ private final RestaurantMapperImpl restaurantMapper;
     }
 
     @GetMapping(path = "/restaurants/{id}")
-    public ResponseEntity<Optional<Restaurant>> getRestaurantById(@PathVariable("id") Long restaurantId) {
-        Optional<Restaurant> result = restaurantService.findById(restaurantId);
+    public ResponseEntity<RestaurantWithDishes> getRestaurantById(@PathVariable("id") Long restaurantId) {
+        RestaurantWithDishes result = restaurantService.getRestaurantWithDishes(restaurantId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

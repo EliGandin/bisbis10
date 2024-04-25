@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
-    @Query("SELECT r FROM Restaurant r WHERE r.cuisines = ?1")
-    Iterable<Restaurant> findAllByCuisines(String cuisines);
+    @Query("SELECT r FROM Restaurant r WHERE :cuisine MEMBER OF r.cuisines")
+    Iterable<Restaurant> findAllByCuisine(String cuisine);
 }

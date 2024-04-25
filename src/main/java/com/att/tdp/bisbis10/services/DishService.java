@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DishService {
     List<DishDTO> getAllDishesByRestaurant(Long id);
-    Dish getDishById(Long id);
+    Iterable<Dish> getDishesById(Long id);
     void addDish(Dish dish);
     boolean updateDish(Long id, DishDTO dishDTO);
     boolean deleteDish(Long id);

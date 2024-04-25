@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DishServiceImpl implements DishService {
@@ -33,8 +34,8 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public Dish getDishById(Long id) {
-        return dishRepository.findById(id).orElse(null);
+    public Iterable<Dish> getDishesById(Long id) {
+        return dishRepository.findAllByRestaurantId(id);
     }
 
     @Override
@@ -44,22 +45,17 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public boolean updateDish(Long id, DishDTO dishDTO) {
-        Dish target = getDishById(id);
-        if (target == null) {
-            return false;
-        }
-        target.setPrice(dishDTO.getPrice());
-        target.setDescription(dishDTO.getDescription());
-        dishRepository.save(target);
+        Optional<Dish> target = dishRepository.findById(id);
+
+        target.get().setPrice(dishDTO.getPrice());
+        target.get().setDescription(dishDTO.getDescription());
+        dishRepository.save(target.get());
         return true;
     }
 
     @Override
     public boolean deleteDish(Long id) {
-        Dish dish = getDishById(id);
-        if (dish == null) {
-            return false;
-        }
+        Optional<Dish> dish = dishRepository.findById(id);
         dishRepository.deleteById(id);
         return true;
     }
