@@ -3,6 +3,8 @@ package com.att.tdp.bisbis10.entities;
 import com.att.tdp.bisbis10.converters.MapToJsonConverter;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -17,16 +19,18 @@ public class Order {
     @JoinColumn(name="restaurant_id")
     private Restaurant restaurant;
 
-    @Convert(converter = MapToJsonConverter.class)
-    @Column(columnDefinition = "jsonb")
-    private Map<Dish, Integer> orderItems;
+//    @OneToMany(mappedBy = "order_id", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<OrderItem> orderItems;
+
+    @Column
+    private String orderId;
 
     public Order() {
     }
 
-    public Order(Restaurant restaurant, Map<Dish, Integer> orderItems) {
+    public Order(Restaurant restaurant, List<OrderItem> orderItems) {
         this.restaurant = restaurant;
-        this.orderItems = orderItems; //TODO:
+//        this.orderItems = orderItems;
     }
 
     public Long getId() {
@@ -45,11 +49,19 @@ public class Order {
         this.restaurant = restaurant;
     }
 
-    public Map<Dish, Integer> getOrderItems() {
-        return orderItems;
+//    public List<OrderItem> getOrderItems() {
+//        return orderItems;
+//    }
+//
+//    public void setOrderItems(List<OrderItem> orderItems) {
+//        this.orderItems = orderItems;
+//    }
+
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setOrderItems(Map<Dish, Integer> orderItems) {
-        this.orderItems = orderItems;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }
