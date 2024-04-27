@@ -14,7 +14,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public void addOrderItem(OrderItem orderItem) {
-        orderItemRepository.save(orderItem);
+    public boolean addOrderItem(OrderItem orderItem) {
+        OrderItem result = orderItemRepository.save(orderItem);
+        return result.getId() != null;
     }
 }

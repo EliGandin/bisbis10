@@ -1,8 +1,10 @@
 package com.att.tdp.bisbis10.services.impl;
 
+import com.att.tdp.bisbis10.dtos.RestaurantDTO;
 import com.att.tdp.bisbis10.dtos.RestaurantWithDishes;
 import com.att.tdp.bisbis10.entities.Dish;
 import com.att.tdp.bisbis10.entities.Restaurant;
+import com.att.tdp.bisbis10.mappers.impl.RestaurantMapperImpl;
 import com.att.tdp.bisbis10.repositories.RestaurantRepository;
 import com.att.tdp.bisbis10.services.RestaurantService;
 import org.springframework.stereotype.Service;
@@ -13,15 +15,23 @@ import java.util.Optional;
 public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final DishServiceImpl dishService;
+    private final RestaurantMapperImpl restaurantMapper;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, DishServiceImpl dishService) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, DishServiceImpl dishService, RestaurantMapperImpl restaurantMapper) {
         this.restaurantRepository = restaurantRepository;
         this.dishService = dishService;
+        this.restaurantMapper = restaurantMapper;
     }
 
     @Override
-    public Optional<Restaurant> findById(Long id) {
-        return restaurantRepository.findById(id);
+    public Restaurant findById(Long id) {
+        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+
+        if (restaurant.isEmpty()) {
+            return null;
+        }
+
+        return restaurant.get();
     }
 
     @Override
@@ -30,22 +40,36 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant addRestaurant(Restaurant restaurant) {
-        return restaurantRepository.save(restaurant);
+    public boolean addRestaurant(RestaurantDTO restaurantDTO) {
+        Restaurant restaurantEntity = restaurantMapper.mapFrom(restaurantDTO);
+        Restaurant restaurant = restaurantRepository.save(restaurantEntity);
+
+        return restaurant.getId() != null;
     }
 
     @Override
-    public Restaurant updateRestaurant(Long id, Restaurant newRestaurant) {
+    public boolean updateRestaurant(Long id, RestaurantDTO restaurantDTO) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
-        restaurant.get().setCuisines(newRestaurant.getCuisines());
+
+        if (restaurant.isEmpty()) {
+            return false;
+        }
+
+        restaurant.get().setCuisines(restaurantDTO.getCuisines());
         restaurantRepository.save(restaurant.get());
-        return restaurant.get();
+        return true;
     }
 
     @Override
-    public void deleteById(Long id) {
+    public boolean deleteById(Long id) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+
+        if (restaurant.isEmpty()) {
+            return false;
+        }
+
         restaurantRepository.delete(restaurant.get());
+        return true;
     }
 
     @Override
@@ -55,10 +79,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     public RestaurantWithDishes getRestaurantWithDishes(Long id) {
         RestaurantWithDishes res = new RestaurantWithDishes();
-        Optional<Restaurant> restaurant = findById(id);
-        Iterable<Dish> dishes = dishService.getDishesById(id);
+        Restaurant restaurant = findById(id);
+        Iterable<Dish> dishes = dishService.getDishesByRestaurantId(id);
 
-        res.setRestaurant(restaurant.get());
+        res.setRestaurant(restaurant);
         res.setDishes(dishes);
 
         return res;

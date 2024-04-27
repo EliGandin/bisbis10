@@ -1,7 +1,8 @@
 package com.att.tdp.bisbis10.services;
 
-import com.att.tdp.bisbis10.entities.Rating;
+import com.att.tdp.bisbis10.dtos.RatingDTO;
+
 
 public interface RatingService {
-    void addRating(Rating newRating);
+    boolean addRating(RatingDTO newRatingDTO);
 }

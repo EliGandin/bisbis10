@@ -8,6 +8,8 @@ import com.att.tdp.bisbis10.repositories.RestaurantRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class DishMapperImpl implements Mapper<Dish, DishDTO> {
     private final ModelMapper modelMapper;
@@ -31,9 +33,8 @@ public class DishMapperImpl implements Mapper<Dish, DishDTO> {
         dish.setDescription(dishDTO.getDescription());
 
 
-        Restaurant restaurant = restaurantRepository.findById(dishDTO.getRestaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
-        dish.setRestaurant(restaurant);
+        Optional<Restaurant> restaurant = restaurantRepository.findById(dishDTO.getRestaurantId());
+        restaurant.ifPresent(dish::setRestaurant);
 
         return dish;
     }

@@ -1,33 +1,39 @@
 package com.att.tdp.bisbis10.services.impl;
 
+import com.att.tdp.bisbis10.dtos.RatingDTO;
 import com.att.tdp.bisbis10.entities.Rating;
 import com.att.tdp.bisbis10.entities.Restaurant;
+import com.att.tdp.bisbis10.mappers.impl.RatingMapperImpl;
 import com.att.tdp.bisbis10.repositories.RatingRepository;
 import com.att.tdp.bisbis10.repositories.RestaurantRepository;
 import com.att.tdp.bisbis10.services.RatingService;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class RatingServiceImpl implements RatingService {
     private final RatingRepository ratingRepository;
     private final RestaurantRepository restaurantRepository;
-    private final RestaurantServiceImpl restaurantService;
+    private final RatingMapperImpl ratingMapper;
 
-    public RatingServiceImpl(RatingRepository ratingRepository,RestaurantRepository restaurantRepository, RestaurantServiceImpl restaurantService) {
+    public RatingServiceImpl(RatingRepository ratingRepository, RestaurantRepository restaurantRepository, RatingMapperImpl ratingMapper) {
         this.ratingRepository = ratingRepository;
         this.restaurantRepository = restaurantRepository;
-        this.restaurantService = restaurantService;
+        this.ratingMapper = ratingMapper;
     }
 
     @Override
-    public void addRating(Rating newRating) {
-        Restaurant restaurant = newRating.getRestaurant();
-        Iterable<Rating> ratings= ratingRepository.findAllByRestaurantId(restaurant.getId());
+    public boolean addRating(RatingDTO newRatingDTO) {
+        Rating rating = ratingMapper.mapFrom(newRatingDTO);
+        Restaurant restaurant = rating.getRestaurant();
+        Iterable<Rating> ratings = ratingRepository.findAllByRestaurantId(restaurant.getId());
 
-        double newAvgRating = calculateAvgRating(ratings, newRating.getRating());
+        double newAvgRating = calculateAvgRating(ratings, newRatingDTO.getRating());
         restaurant.setAvgRating(newAvgRating);
-        restaurantService.addRestaurant(restaurant);
-        ratingRepository.save(newRating);
+        restaurantRepository.save(restaurant);
+        ratingRepository.save(rating);
+
+        return restaurant.getId() != null;
     }
 
     private double calculateAvgRating(Iterable<Rating> ratings, double newRating) {
@@ -38,7 +44,7 @@ public class RatingServiceImpl implements RatingService {
             size++;
         }
         if (size > 0) {
-            return (total + newRating) / (size+1);
+            return (total + newRating) / (size + 1);
         } else {
             return newRating;
         }
