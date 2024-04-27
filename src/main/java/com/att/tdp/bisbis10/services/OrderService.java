@@ -1,7 +1,7 @@
 package com.att.tdp.bisbis10.services;
 
-import com.att.tdp.bisbis10.entities.Order;
+import com.att.tdp.bisbis10.dtos.OrderDTO;
 
 public interface OrderService {
-    boolean addOrder(Order order);
+    String addOrder(OrderDTO orderDTO);
 }

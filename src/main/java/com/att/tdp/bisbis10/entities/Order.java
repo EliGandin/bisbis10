@@ -1,10 +1,11 @@
 package com.att.tdp.bisbis10.entities;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
-@Table(name="orders")
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -12,7 +13,7 @@ public class Order {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="restaurant_id")
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
     @Column

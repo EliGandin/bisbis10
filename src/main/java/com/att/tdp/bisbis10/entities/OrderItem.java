@@ -3,15 +3,14 @@ package com.att.tdp.bisbis10.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "order_items")  // Optional, customize table name if needed
+@Table(name = "order_items")
 public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @JoinColumn(name = "order_id", nullable = false)  // Enforces foreign key relationship
+    @JoinColumn(name = "order_id", nullable = false)
     private String orderId;
 
     private Long dishId;
