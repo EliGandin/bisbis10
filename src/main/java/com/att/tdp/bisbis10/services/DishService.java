@@ -3,12 +3,9 @@ package com.att.tdp.bisbis10.services;
 import com.att.tdp.bisbis10.dtos.DishDTO;
 import com.att.tdp.bisbis10.entities.Dish;
 
-import java.util.List;
-
 public interface DishService {
-    List<DishDTO> getAllDishesByRestaurant(Long id);
-    Iterable<Dish> getDishesById(Long id);
-    void addDish(Dish dish);
+    Iterable<Dish> getDishesByRestaurantId(Long id);
+    boolean addDish(DishDTO dishDTO, Long restaurantId);
     boolean updateDish(Long id, DishDTO dishDTO);
     boolean deleteDish(Long id);
 }

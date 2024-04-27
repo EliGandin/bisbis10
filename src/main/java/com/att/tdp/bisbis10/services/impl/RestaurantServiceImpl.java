@@ -80,7 +80,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public RestaurantWithDishes getRestaurantWithDishes(Long id) {
         RestaurantWithDishes res = new RestaurantWithDishes();
         Restaurant restaurant = findById(id);
-        Iterable<Dish> dishes = dishService.getDishesById(id);
+        Iterable<Dish> dishes = dishService.getDishesByRestaurantId(id);
 
         res.setRestaurant(restaurant);
         res.setDishes(dishes);
