@@ -26,7 +26,7 @@ public class RatingServiceImpl implements RatingService {
 
         double newAvgRating = calculateAvgRating(ratings, newRating.getRating());
         restaurant.setAvgRating(newAvgRating);
-        restaurantService.addRestaurant(restaurant);
+//        restaurantService.addRestaurant(restaurant);
         ratingRepository.save(newRating);
     }
 

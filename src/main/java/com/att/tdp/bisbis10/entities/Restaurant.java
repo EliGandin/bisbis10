@@ -15,9 +15,6 @@ public class Restaurant {
     
     private String name;
 
-//    @ManyToOne
-//    private Rating rating;
-
     @Column
     @Formula("(SELECT AVG(average_rating) FROM ratings r WHERE r.restaurant_id = id)")
     private Double avgRating;
@@ -30,7 +27,7 @@ public class Restaurant {
 
     public Restaurant() {
     }
-    public Restaurant(String name,Rating rating, boolean isKosher, List<String> cuisines) {
+    public Restaurant(String name, boolean isKosher, List<String> cuisines) {
         this.name = name;
         this.isKosher = isKosher;
         this.cuisines = cuisines;
@@ -51,14 +48,6 @@ public class Restaurant {
     public void setName(String name) {
         this.name = name;
     }
-
-//    public Rating getRating() {
-//        return rating;
-//    }
-//
-//    public void setRating(Rating rating) {
-//        this.rating = rating;
-//    }
 
     public boolean isKosher() {
         return isKosher;
